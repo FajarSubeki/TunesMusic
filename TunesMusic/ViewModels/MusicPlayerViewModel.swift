@@ -35,6 +35,7 @@ class MusicPlayerViewModel: ObservableObject {
         isLoading = true
         songs = []
         showEmptyState = false
+        errorMessage = ""
 
         apiService.fetchSongs(query: searchQuery) { [weak self] result in
             DispatchQueue.main.async {
@@ -120,4 +121,9 @@ class MusicPlayerViewModel: ObservableObject {
     func seek(to time: Double) {
         playerService.seek(to: time)
     }
+    
+    func clearSearchResults() {
+        songs = []
+    }
+
 }

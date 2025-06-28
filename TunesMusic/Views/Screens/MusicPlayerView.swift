@@ -14,7 +14,11 @@ struct MusicPlayerView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                SearchBarView(text: $viewModel.searchQuery, onSearch: viewModel.search)
+                SearchBarView(
+                    text: $viewModel.searchQuery,
+                    onSearch: viewModel.search,
+                    onClear: viewModel.clearSearchResults
+                )
 
                 Spacer(minLength: 0)
 
@@ -79,8 +83,6 @@ struct MusicPlayerView: View {
     }
     
 }
-
-
 
 #Preview {
     MusicPlayerView()

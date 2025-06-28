@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct SearchBarView: View {
+    
     @Binding var text: String
     var onSearch: () -> Void
+    var onClear: () -> Void
+    
     @State private var searchWorkItem: DispatchWorkItem?
 
     var body: some View {
@@ -24,14 +27,21 @@ struct SearchBarView: View {
             .padding(.top, 16)
             .padding(.bottom, 8)
             .onChange(of: text, initial: false) {_, newText in
+                
                 searchWorkItem?.cancel()
-                if newText.count >= 2 {
-                    let task = DispatchWorkItem {
-                        onSearch()
-                    }
-                    searchWorkItem = task
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: task)
+
+                if newText.trimmingCharacters(in: .whitespaces).count < 1 {
+                    onClear()
+                    return
                 }
+
+                // Debounce search
+                let task = DispatchWorkItem {
+                    onSearch()
+                }
+                searchWorkItem = task
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: task)
+            
             }
 
     }
