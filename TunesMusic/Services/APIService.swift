@@ -7,9 +7,11 @@
 
 import Foundation
 
-extension APIService: APIServiceProtocol {}
+protocol APIServiceProtocol {
+    func fetchSongs(query: String, completion: @escaping (Result<[Song], Error>) -> Void)
+}
 
-class APIService {
+class APIService : APIServiceProtocol{
     
     func fetchSongs(query: String, completion: @escaping (Result<[Song], Error>) -> Void) {
         let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""

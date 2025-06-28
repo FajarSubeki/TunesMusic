@@ -8,9 +8,15 @@
 import Foundation
 import AVFoundation
 
-extension PlayerService: PlayerServiceProtocol {}
+protocol PlayerServiceProtocol {
+    func play(url: String)
+    func pause()
+    func resume()
+    func stop()
+}
 
-class PlayerService {
+
+class PlayerService : PlayerServiceProtocol{
     private var player: AVPlayer?
     private var currentUrl: String?
 
