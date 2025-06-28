@@ -5,6 +5,8 @@
 //  Created by Fajar Subeki on 28/06/25.
 //
 
+import Foundation
+
 enum APIError: Error, LocalizedError {
     case invalidURL
     case emptyData
