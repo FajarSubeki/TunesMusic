@@ -23,9 +23,6 @@ jobs:
           gem install bundler
           bundle install
 
-      - name: Install CocoaPods
-        run: pod install
-
       - name: Build and archive app with fastlane
         env:
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
