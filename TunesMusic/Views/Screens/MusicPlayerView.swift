@@ -70,9 +70,6 @@ struct MusicPlayerView: View {
                 LoadingView()
             }
 
-            if showErrorToast {
-                ErrorToastView(message: viewModel.errorMessage)
-            }
         }
         .toast(message: viewModel.errorMessage, isVisible: $showErrorToast)
         .onChange(of: viewModel.errorMessage, initial: false) { _, newError in

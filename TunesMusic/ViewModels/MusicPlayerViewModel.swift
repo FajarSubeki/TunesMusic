@@ -35,7 +35,6 @@ class MusicPlayerViewModel: ObservableObject {
         isLoading = true
         songs = []
         showEmptyState = false
-        errorMessage = ""
 
         apiService.fetchSongs(query: searchQuery) { [weak self] result in
             DispatchQueue.main.async {
