@@ -12,13 +12,16 @@ class MusicPlayerViewModel: ObservableObject {
     @Published var searchQuery: String = ""
     @Published var songs: [Song] = []
     @Published var isLoading: Bool = false
-    @Published var errorMessage: String? = nil
+    @Published var errorMessage: String = ""
     @Published var currentSong: Song? = nil
     @Published var isPlaying: Bool = false
     @Published var showEmptyState: Bool = false
+    @Published var currentTime: Double = 0
+    @Published var duration: Double = 0
+    @Published var isFinished: Bool = false
     
-    private let apiService: APIServiceProtocol
-    private let playerService: PlayerServiceProtocol
+    let apiService: APIServiceProtocol
+    let playerService: PlayerServiceProtocol
     
     init(apiService: APIServiceProtocol = APIService(),
         playerService: PlayerServiceProtocol = PlayerService()) {
@@ -30,7 +33,6 @@ class MusicPlayerViewModel: ObservableObject {
         guard !searchQuery.isEmpty else { return }
 
         isLoading = true
-        errorMessage = nil
         songs = []
         showEmptyState = false
 
@@ -55,8 +57,20 @@ class MusicPlayerViewModel: ObservableObject {
 
     func play(song: Song) {
         currentSong = song
-        playerService.play(url: song.previewUrl)
         isPlaying = true
+        isFinished = false
+
+        playerService.play(
+            url: song.previewUrl,
+            onTimeUpdate: { [weak self] current, duration in
+                self?.currentTime = current
+                self?.duration = duration
+            },
+            onFinished: { [weak self] in
+                self?.isFinished = true
+                self?.isPlaying = false
+            }
+        )
     }
 
     func pause() {
@@ -73,5 +87,37 @@ class MusicPlayerViewModel: ObservableObject {
         playerService.stop()
         isPlaying = false
         currentSong = nil
+    }
+    
+    func togglePlayPause() {
+        guard let song = currentSong else { return }
+
+        if isPlaying {
+            pause()
+        } else {
+            if isFinished {
+                play(song: song)
+            } else {
+                resume()
+            }
+        }
+    }
+
+    func next() {
+        guard let current = currentSong,
+              let index = songs.firstIndex(where: { $0.trackId == current.trackId }),
+              index + 1 < songs.count else { return }
+        play(song: songs[index + 1])
+    }
+
+    func previous() {
+        guard let current = currentSong,
+              let index = songs.firstIndex(where: { $0.trackId == current.trackId }),
+              index > 0 else { return }
+        play(song: songs[index - 1])
+    }
+
+    func seek(to time: Double) {
+        playerService.seek(to: time)
     }
 }

@@ -7,4 +7,5 @@
 
 struct AppConstants {
     static let emptyData = "No songs found for"
+    static let defaultSearch = "Search your like songs..."
 }
