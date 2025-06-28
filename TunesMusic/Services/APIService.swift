@@ -7,6 +7,8 @@
 
 import Foundation
 
+extension APIService: APIServiceProtocol {}
+
 class APIService {
     
     func fetchSongs(query: String, completion: @escaping (Result<[Song], Error>) -> Void) {

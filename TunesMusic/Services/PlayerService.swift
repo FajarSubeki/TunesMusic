@@ -8,6 +8,8 @@
 import Foundation
 import AVFoundation
 
+extension PlayerService: PlayerServiceProtocol {}
+
 class PlayerService {
     private var player: AVPlayer?
     private var currentUrl: String?
@@ -23,6 +25,10 @@ class PlayerService {
 
     func pause() {
         player?.pause()
+    }
+    
+    func resume() {
+        player?.play()
     }
 
     func stop() {
