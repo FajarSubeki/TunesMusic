@@ -25,13 +25,42 @@ final class MusicPlayerViewModelTests: XCTestCase {
         var didPause = false
         var didResume = false
         var didStop = false
+        var didSeek = false
+        var lastSeekTime: Double?
+        var lastPlayedUrl: String?
 
-        func play(url: String) { didPlay = true }
-        func pause() { didPause = true }
-        func resume() { didResume = true }
-        func stop() { didStop = true }
+        var onTimeUpdateCalled: Bool = false
+        var onFinishedCalled: Bool = false
+
+        func play(url: String, onTimeUpdate: ((Double, Double) -> Void)? = nil, onFinished: (() -> Void)? = nil) {
+            didPlay = true
+            lastPlayedUrl = url
+
+            onTimeUpdate?(10.0, 120.0)
+            onTimeUpdateCalled = true
+
+            onFinished?()
+            onFinishedCalled = true
+        }
+
+        func pause() {
+            didPause = true
+        }
+
+        func resume() {
+            didResume = true
+        }
+
+        func stop() {
+            didStop = true
+        }
+
+        func seek(to time: Double) {
+            didSeek = true
+            lastSeekTime = time
+        }
     }
-
+    
     private let sampleSong = Song(
         trackId: 123,
         trackName: "Love Story",
