@@ -14,8 +14,8 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v3
 
-      - name: Set Xcode version to 15.4
-        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+      - name: Install CocoaPods
+        run: pod install
 
       - name: Create build folder
         run: mkdir -p build
@@ -23,7 +23,7 @@ jobs:
       - name: Build app for Simulator (no signing required)
         run: |
           xcodebuild \
-            -project TunesMusic.xcodeproj
+            -workspace TunesMusic.xcworkspace
             -scheme TunesMusic
             -sdk iphonesimulator \
             -configuration Debug \
