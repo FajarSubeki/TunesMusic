@@ -23,7 +23,7 @@ jobs:
       - name: Build app for Simulator (no signing required)
         run: |
           xcodebuild \
-            -workspace TunesMusic.xcworkspace \
+            -project TunesMusic.xcodeproj \
             -scheme TunesMusic \
             -sdk iphonesimulator \
             -configuration Debug \
