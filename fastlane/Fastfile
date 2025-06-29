@@ -17,14 +17,14 @@ default_platform(:ios)
 platform :ios do
   desc "Build IPA for Firebase App Distribution"
   lane :build_ipa do
-    match(type: "appstore")
+    match(type: "adhoc")
 
     build_app(
   	scheme: "tunemusicscheme", 
   	export_method: "ad-hoc", 
   	clean: true,
   	output_directory: "./build",
- 	 output_name: "TuneMusic.ipa"
+ 	output_name: "TuneMusic.ipa"
     )
 
   end

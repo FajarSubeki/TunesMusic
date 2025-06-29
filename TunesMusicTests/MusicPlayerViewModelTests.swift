@@ -9,7 +9,7 @@ import XCTest
 @testable import TunesMusic
 
 final class MusicPlayerViewModelTests: XCTestCase {
-    
+
     class MockAPIService: APIServiceProtocol {
         var result: Result<[Song], Error>?
 
@@ -29,8 +29,8 @@ final class MusicPlayerViewModelTests: XCTestCase {
         var lastSeekTime: Double?
         var lastPlayedUrl: String?
 
-        var onTimeUpdateCalled: Bool = false
-        var onFinishedCalled: Bool = false
+        var onTimeUpdateCalled = false
+        var onFinishedCalled = false
 
         func play(url: String, onTimeUpdate: ((Double, Double) -> Void)? = nil, onFinished: (() -> Void)? = nil) {
             didPlay = true
@@ -43,24 +43,15 @@ final class MusicPlayerViewModelTests: XCTestCase {
             onFinishedCalled = true
         }
 
-        func pause() {
-            didPause = true
-        }
-
-        func resume() {
-            didResume = true
-        }
-
-        func stop() {
-            didStop = true
-        }
-
+        func pause() { didPause = true }
+        func resume() { didResume = true }
+        func stop() { didStop = true }
         func seek(to time: Double) {
             didSeek = true
             lastSeekTime = time
         }
     }
-    
+
     private let sampleSong = Song(
         trackId: 123,
         trackName: "Love Story",
@@ -114,7 +105,7 @@ final class MusicPlayerViewModelTests: XCTestCase {
     func testSearchEmptyResult() {
         let mockAPI = MockAPIService()
         let mockPlayer = MockPlayerService()
-        mockAPI.result = .success([]) // empty
+        mockAPI.result = .success([])
         let viewModel = MusicPlayerViewModel(apiService: mockAPI, playerService: mockPlayer)
         viewModel.searchQuery = "unknown"
 
@@ -143,6 +134,8 @@ final class MusicPlayerViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.currentSong?.trackId, sampleSong.trackId)
         XCTAssertTrue(viewModel.isPlaying)
         XCTAssertTrue(mockPlayer.didPlay)
+        XCTAssertTrue(mockPlayer.onTimeUpdateCalled)
+        XCTAssertTrue(mockPlayer.onFinishedCalled)
     }
 
     func testPauseSong() {
@@ -184,4 +177,36 @@ final class MusicPlayerViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isPlaying)
         XCTAssertTrue(mockPlayer.didStop)
     }
+
+    func testSeekSong() {
+        let viewModel = MusicPlayerViewModel(
+            apiService: MockAPIService(),
+            playerService: MockPlayerService()
+        )
+
+        let mockPlayer = viewModel.playerService as! MockPlayerService
+        viewModel.seek(to: 45.0)
+
+        XCTAssertTrue(mockPlayer.didSeek)
+        XCTAssertEqual(mockPlayer.lastSeekTime, 45.0)
+    }
+
+    func testTogglePlayPause() {
+        let viewModel = MusicPlayerViewModel(
+            apiService: MockAPIService(),
+            playerService: MockPlayerService()
+        )
+
+        let mockPlayer = viewModel.playerService as! MockPlayerService
+        viewModel.play(song: sampleSong)
+
+        viewModel.togglePlayPause()
+        XCTAssertFalse(viewModel.isPlaying)
+        XCTAssertTrue(mockPlayer.didPause)
+
+        viewModel.togglePlayPause()
+        XCTAssertTrue(viewModel.isPlaying)
+        XCTAssertTrue(mockPlayer.didResume)
+    }
 }
+
