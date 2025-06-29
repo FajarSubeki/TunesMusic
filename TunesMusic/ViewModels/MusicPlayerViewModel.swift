@@ -43,12 +43,12 @@ class MusicPlayerViewModel: ObservableObject {
                 case .success(let songs):
                     self?.songs = songs
                     self?.showEmptyState = songs.isEmpty
-                    if songs.isEmpty {
-                        self?.errorMessage = "\(AppConstants.emptyData) \"\(self?.searchQuery ?? "")\"."
+                    if songs.isEmpty, let query = self?.searchQuery {
+                        self?.errorMessage = ErrorMessageBuilder.emptyResult(for: query)
                     }
                 case .failure(let error):
                     self?.songs = []
-                    self?.errorMessage = error.localizedDescription
+                    self?.errorMessage = ErrorMessageBuilder.apiError(error)
                     self?.showEmptyState = true
                 }
             }

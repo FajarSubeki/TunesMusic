@@ -36,22 +36,16 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7CB868422E0F82CE0082C068 /* TunesMusic */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = TunesMusic;
 			sourceTree = "<group>";
 		};
 		7CB868502E0F82D10082C068 /* TunesMusicTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = TunesMusicTests;
 			sourceTree = "<group>";
 		};
 		7CB8685A2E0F82D10082C068 /* TunesMusicUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = TunesMusicUITests;
 			sourceTree = "<group>";
 		};
